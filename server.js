@@ -10,7 +10,6 @@ const sign = require('jsonwebtoken').sign
 const crypto = require('crypto')
 const queryEncode = require("querystring").encode
 
-
 const env = JSON.parse(fs.readFileSync("./env.json"))
 
 const access_key = env.UPBIT_OPEN_API_ACCESS_KEY
@@ -233,6 +232,32 @@ app.get('/v1/status/wallet', function(req, res) {
         console.log(statusCode)
         res.send(JSON.parse(body))
     })
+})
+
+/*
+    Quitation API
+*/
+
+/*
+    마켓 코드 조회
+    업비트에서 거래 가능한 마켓 목록
+*/
+app.get('/v1/market/all', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+    
+    let options = {
+        method: "GET",
+        url: server_url + '/v1/market/all?isDetails=true'
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        console.log(statusCode)
+        res.send(JSON.parse(body))
+    })
+
 })
 
 
