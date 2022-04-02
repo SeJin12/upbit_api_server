@@ -20,14 +20,14 @@ const server_url = env.UPBIT_OPEN_API_SERVER_URL
 const app = express()
 
 app.get('/', function(req, res) {
-    res.send("hello!")
+    res.send("upbit API Server!")
 })
 
 /*
     전체 계좌 조회
     내가 보유한 자산 리스트를 보여줍니다.
 */
-app.get('/asset', function(req, res) {
+app.get('/v1/accounts', function(req, res) {
     console.log( req.url + ", TIME : " + (new Date())) 
 
     const payload = {
@@ -54,7 +54,7 @@ app.get('/asset', function(req, res) {
     API 키 리스트 조회
     API 키 목록 및 만료 일자를 조회합니다.
 */
-app.get('/api_keys', function(req, res) {
+app.get('/v1/api_keys', function(req, res) {
     console.log( req.url + ", TIME : " + (new Date())) 
     
     const payload = {
@@ -80,7 +80,7 @@ app.get('/api_keys', function(req, res) {
 /*
     출금 리스트 조회
 */
-app.get('/withdraws/:currency', function(req, res) {
+app.get('/v1/withdraws/:currency', function(req, res) {
     console.log( req.url + ", TIME : " + (new Date())) 
 
     const currency = req.params.currency
