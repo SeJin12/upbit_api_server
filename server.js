@@ -260,6 +260,136 @@ app.get('/v1/market/all', function(req, res) {
 
 })
 
+/*
+    분(Minute) 캔들
+*/
+app.get('/v1/candles/minutes/:unit/:market/:count', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+    
+    let options = {
+        method: "GET",
+        url: server_url + '/v1/candles/minutes/' + req.params.unit + '?market=' + req.params.market + '&count=' + req.params.count
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        console.log(statusCode)
+        res.send(JSON.parse(body))
+    })
+
+})
+
+/*
+    일(Day) 캔들
+*/
+app.get('/v1/candles/days/:market/:count', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+    
+    let options = {
+        method: "GET",
+        url: server_url + '/v1/candles/days' + '?market=' + req.params.market + '&count=' + req.params.count
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        console.log(statusCode)
+        res.send(JSON.parse(body))
+    })
+
+})
+
+/*
+    주(Week) 캔들
+*/
+app.get('/v1/candles/weeks/:market/:count', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+    
+    let options = {
+        method: "GET",
+        url: server_url + '/v1/candles/weeks' + '?market=' + req.params.market + '&count=' + req.params.count
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        console.log(statusCode)
+        res.send(JSON.parse(body))
+    })
+
+})
+
+/*
+    월(Month) 캔들
+*/
+app.get('/v1/candles/months/:market/:count', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+    
+    let options = {
+        method: "GET",
+        url: server_url + '/v1/candles/months' + '?market=' + req.params.market + '&count=' + req.params.count
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        console.log(statusCode)
+        res.send(JSON.parse(body))
+    })
+
+})
+
+/*
+    주문(Order)
+*/
+/*
+    주문하기
+    주문 요청을 한다.
+*/
+app.post('/v1/orders', function(req, res) {
+    console.log( req.url + ", TIME : " + (new Date())) 
+
+    const body = {
+        market: 'KRW-BTC',
+        side: 'ask',
+        volume: '0.005',
+        price: '70000000',
+        ord_type: 'limit',
+    }
+    
+    const query = queryEncode(body)
+
+    const hash = crypto.createHash('sha512')
+    const queryHash = hash.update(query, 'utf-8').digest('hex')
+    
+    const payload = {
+        access_key: access_key,
+        nonce: uuidv4(),
+        query_hash: queryHash,
+        query_hash_alg: 'SHA512',
+    }
+    
+    const token = sign(payload, secret_key)
+
+    const options = {
+        method: "POST",
+        url: server_url + "/v1/orders",
+        headers: {Authorization: `Bearer ${token}`},
+        json: body
+    }
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error)
+    
+        let statusCode = response.statusCode
+        res.send(response.body);
+    })
+})
 
 app.listen(3000, function() {
     console.log("start! node server");
