@@ -1,12 +1,10 @@
 # upbit_api_server
 
-```python
-# python
-print("Hello Python")
-```
+업비트 API 서버
 
+
+`env.json`
 ```json
-// env.json
 {
     "UPBIT_OPEN_API_ACCESS_KEY":"UPBIT_OPEN_API_ACCESS_KEY"
     ,"UPBIT_OPEN_API_SECRET_KEY":"UPBIT_OPEN_API_SECRET_KEY"
