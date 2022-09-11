@@ -11,6 +11,11 @@ const queryEncode = require("querystring").encode;
 
 const server_url = "https://api.upbit.com";
 
+const { findMarket, findCandleMarket } = require("./database.js");
+
+// exec batch schedule
+require("./batch")
+
 // Server
 const app = express();
 
@@ -29,6 +34,7 @@ app.get("/", function (req, res) {
 */
 app.get("/v1/accounts", function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
+  console.log(req);
   const { access_key, secret_key } = req.headers;
 
   const payload = {
@@ -241,48 +247,32 @@ app.get("/v1/status/wallet", function (req, res) {
     마켓 코드 조회
     업비트에서 거래 가능한 마켓 목록
 */
-app.get("/v1/market/all", function (req, res) {
+app.get("/v1/market/all", async function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
+  const markets = await findMarket();
+  res.send(markets);
+//   let options = {
+//     method: "GET",
+//     url: server_url + "/v1/market/all?isDetails=true",
+//   };
 
-  let options = {
-    method: "GET",
-    url: server_url + "/v1/market/all?isDetails=true",
-  };
+//   request(options, (error, response, body) => {
+//     if (error) throw new Error(error);
 
-  request(options, (error, response, body) => {
-    if (error) throw new Error(error);
-
-    let statusCode = response.statusCode;
-    console.log(statusCode);
-    res.send(JSON.parse(body));
-  });
+//     const data = JSON.parse(body);
+    
+//     res.send(data);
+//   });
 });
 
 /*
     분(Minute) 캔들
 */
-app.get("/v1/candles/minutes/:unit/:market/:count", function (req, res) {
+app.get("/v1/candles/minutes/:unit/:market/:count", async function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
+  const data = await findCandleMarket({market: req.params.market});
 
-  let options = {
-    method: "GET",
-    url:
-      server_url +
-      "/v1/candles/minutes/" +
-      req.params.unit +
-      "?market=" +
-      req.params.market +
-      "&count=" +
-      req.params.count,
-  };
-
-  request(options, (error, response, body) => {
-    if (error) throw new Error(error);
-
-    let statusCode = response.statusCode;
-    console.log(statusCode);
-    res.send(JSON.parse(body));
-  });
+  res.send(data);
 });
 
 /*
