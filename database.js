@@ -10,9 +10,9 @@ db.on("error", function () {
   console.log("Connection Failed!");
 });
 
-db.on("open", function () {
-  console.log("Connected");
-});
+// db.on("open", function () {
+//   console.log("Connected");
+// });
 
 // Markets
 const Market = mongoose.model("markets", market);

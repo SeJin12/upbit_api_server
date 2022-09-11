@@ -10,9 +10,9 @@ const {
 } = require("./database");
 
 /**
- * 마켓 종목 동기화 1시간마다 실행
+ * 마켓 종목 동기화. 매일 12시 실행
  */
-schedule.scheduleJob("* * 1 * * *", async function () {
+schedule.scheduleJob("0 0 12 * * *", async function () {
   console.log("getmarket");
 
   const markets = await findMarket();
@@ -31,7 +31,9 @@ schedule.scheduleJob("* * 1 * * *", async function () {
   (async () => {
     const markets = await findMarket();
     const list = [];
-    markets.filter(data => data.market.includes('KRW-')).map(data=> list.push(data));
+    markets
+      .filter((data) => data.market.includes("KRW-"))
+      .map((data) => list.push(data));
 
     const size = list.length;
     list.sort(function (a, b) {
@@ -40,7 +42,7 @@ schedule.scheduleJob("* * 1 * * *", async function () {
       return 0;
     });
     let index = 0;
-
+    if (size == 0) return;
     setInterval(async () => {
       const data = await axios
         .get(
@@ -59,6 +61,6 @@ schedule.scheduleJob("* * 1 * * *", async function () {
       console.log(index, " : ", list[index].market);
       index++;
       if (index == size) index = 0;
-    }, 500);
+    }, 200);
   })();
 }
