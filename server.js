@@ -11,10 +11,13 @@ const queryEncode = require("querystring").encode;
 
 const server_url = "https://api.upbit.com";
 
-const { findMarket, findCandleMarket } = require("./database.js");
+const { MinuteCandle } = require("./schema/minuteCandle.js");
+const { Find } = require("./database.js");
+const { Market } = require("./schema/market.js");
+const { Ticker } = require("./schema/ticker.js");
 
-// exec batch schedule
-require("./batch")
+// Exec batch schedule
+require("./batch");
 
 // Server
 const app = express();
@@ -34,7 +37,6 @@ app.get("/", function (req, res) {
 */
 app.get("/v1/accounts", function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
-  console.log(req);
   const { access_key, secret_key } = req.headers;
 
   const payload = {
@@ -249,20 +251,17 @@ app.get("/v1/status/wallet", function (req, res) {
 */
 app.get("/v1/market/all", async function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
-  const markets = await findMarket();
+  const markets = await Find(Market);
   res.send(markets);
-//   let options = {
-//     method: "GET",
-//     url: server_url + "/v1/market/all?isDetails=true",
-//   };
+});
 
-//   request(options, (error, response, body) => {
-//     if (error) throw new Error(error);
-
-//     const data = JSON.parse(body);
-    
-//     res.send(data);
-//   });
+/*
+    현재가 정보
+*/
+app.get("/v1/ticker/:market", async function (req, res) {
+  console.log(req.url + ", TIME : " + new Date());
+  const data = await Find(Ticker, { market: req.params.market }, 1);
+  res.send(data);
 });
 
 /*
@@ -270,8 +269,7 @@ app.get("/v1/market/all", async function (req, res) {
 */
 app.get("/v1/candles/minutes/:unit/:market/:count", async function (req, res) {
   console.log(req.url + ", TIME : " + new Date());
-  const data = await findCandleMarket({market: req.params.market});
-
+  const data = await Find(MinuteCandle, { market: req.params.market }, 1);
   res.send(data);
 });
 

@@ -1,75 +1,64 @@
 const mongoose = require("mongoose");
-const { market } = require("./schema/market");
-const { minuteCandle } = require("./schema/minuteCandle");
 
 mongoose.connect("mongodb://127.0.0.1:27017/project");
 
-const db = mongoose.connection;
+/**
+ * 최초 데이터 1건을 조회한다.
+ * @param {mongoose.Schema} schema
+ * @param {object} filter
+ * @returns
+ */
+const FindFirst = async (schema, filter) => {
+  return await schema
+    .findOne(filter)
+    .then((response) => response)
+    .catch((error) => error);
+};
 
-db.on("error", function () {
-  console.log("Connection Failed!");
-});
-
-// db.on("open", function () {
-//   console.log("Connected");
-// });
-
-// Markets
-const Market = mongoose.model("markets", market);
-
-const insertMarket = (data) => {
+/**
+ * 데이터를 저장한다.
+ * @param {mongoose.Schema} schema
+ * @param {object[]} data
+ */
+const Save = (schema, data) => {
   for (value in data) {
-    new Market(data[value]).save(function (error, data) {
-      if (error) {
-        console.log("failed insertMarket.", data);
-      } else {
-        console.log("Success insertMarket.", data);
-      }
-    });
+    new schema(data[value])
+      .save()
+      .then((response) => response)
+      .catch((error) => error);
   }
 };
-
-const findMarket = async () => {
-  return await Market.find(function (error, data) {
-    if (error) {
-      return error;
-    } else {
-      return data;
-    }
-  }).clone();
-};
-
-const deleteAllMarkets = async () => {
-  return await Market.deleteMany();
-};
-
-// candle 1
-const MinuteCandle = mongoose.model("candles1", minuteCandle);
-
-const insertMinuteCandle = (data) => {
-  for (value in data) {
-    new MinuteCandle(data[value]).save(function (error, data) {
-      if (error) {
-        // console.log("failed insertMinuteCandle.", data);
-      } else {
-        // console.log("Success insertMinuteCandle.", data);
-      }
-    });
-  }
-};
-
-const findCandleMarket = async (filter) => {
-  return await MinuteCandle.find(filter)
+/**
+ * 데이터를 조회하고, 최신순으로 조회한다.
+ * @param {mongoose.Schema} schema
+ * @param {object} filter
+ * @param {number} limit
+ * @returns
+ */
+const Find = async (schema, filter = undefined, limit = undefined) => {
+  return await schema
+    .find(filter)
     .sort({ _id: -1 })
-    .limit(1)
-    .then((res) => res)
-    .catch((e) => e);
+    .limit(limit)
+    .then((response) => response)
+    .catch((error) => error);
+};
+
+/**
+ * 데이터를 삭제한다.
+ * @param {mongoose.Schema} schema
+ * @param {object[]} data
+ * @returns { acknowledged: boolean, deletedCount: number }
+ */
+const Delete = async (schema, filter = undefined) => {
+  return await Market.deleteMany(filter)
+    .then((response) => response)
+    .catch((error) => error);
 };
 
 module.exports = {
-  insertMarket,
-  findMarket,
-  deleteAllMarkets,
-  insertMinuteCandle,
-  findCandleMarket,
+  FindFirst,
+  Find,
+  Save,
+  Delete,
 };
