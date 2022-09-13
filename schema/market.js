@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const market = new Schema({
@@ -8,8 +8,4 @@ const market = new Schema({
   market_warning: "string",
 });
 
-const Market = mongoose.model("markets", market);
-
-module.exports = {
-  Market,
-};
+export const Market = mongoose.model("markets", market);

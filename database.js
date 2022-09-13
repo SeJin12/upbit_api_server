@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 mongoose.connect("mongodb://127.0.0.1:27017/project");
 
@@ -8,7 +8,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/project");
  * @param {object} filter
  * @returns
  */
-const FindFirst = async (schema, filter) => {
+export const FindFirst = async (schema, filter) => {
   return await schema
     .findOne(filter)
     .then((response) => response)
@@ -20,13 +20,13 @@ const FindFirst = async (schema, filter) => {
  * @param {mongoose.Schema} schema
  * @param {object[]} data
  */
-const Save = (schema, data) => {
-  for (value in data) {
-    new schema(data[value])
+export const Save = (schema, data) => {
+  data.forEach((element) =>
+    new schema(element)
       .save()
       .then((response) => response)
-      .catch((error) => error);
-  }
+      .catch((error) => error)
+  );
 };
 
 /**
@@ -36,7 +36,7 @@ const Save = (schema, data) => {
  * @param {number} limit
  * @returns
  */
-const Find = async (schema, filter = undefined, limit = undefined) => {
+export const Find = async (schema, filter = undefined, limit = undefined) => {
   return await schema
     .find(filter)
     .sort({ _id: -1 })
@@ -51,15 +51,9 @@ const Find = async (schema, filter = undefined, limit = undefined) => {
  * @param {object[]} data
  * @returns { acknowledged: boolean, deletedCount: number }
  */
-const Delete = async (schema, filter = undefined) => {
-  return await schema.deleteMany(filter)
+export const Delete = async (schema, filter = undefined) => {
+  return await schema
+    .deleteMany(filter)
     .then((response) => response)
     .catch((error) => error);
-};
-
-module.exports = {
-  FindFirst,
-  Find,
-  Save,
-  Delete,
 };

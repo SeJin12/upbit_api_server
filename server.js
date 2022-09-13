@@ -1,23 +1,24 @@
-const express = require("express");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import request from "request";
+import * as uuid4 from "uuid4";
+import * as jsonwebtoken from "jsonwebtoken";
+import crypto from "crypto";
+import { encode as queryEncode } from "querystring";
 
-const bodyParser = require("body-parser");
-const cors = require("cors");
-
-const request = require("request");
-const uuidv4 = require("uuid4");
-const sign = require("jsonwebtoken").sign;
-const crypto = require("crypto");
-const queryEncode = require("querystring").encode;
+const uuidv4 = uuid4.uuidv4;
+const sign = jsonwebtoken.sign;
 
 const server_url = "https://api.upbit.com";
 
-const { MinuteCandle } = require("./schema/minuteCandle.js");
-const { Find } = require("./database.js");
-const { Market } = require("./schema/market.js");
-const { Ticker } = require("./schema/ticker.js");
+import { MinuteCandle } from "./schema/minuteCandle.js";
+import { Find } from "./database.js";
+import { Market } from "./schema/market.js";
+import { Ticker } from "./schema/ticker.js";
 
 // Exec batch schedule
-require("./batch");
+import * as batch from "./batch.js";
 
 // Server
 const app = express();

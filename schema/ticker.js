@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const ticker = new Schema({
@@ -29,8 +29,4 @@ const ticker = new Schema({
   lowest_52_week_date: String,
 });
 
-const Ticker = mongoose.model("tickers", ticker);
-
-module.exports = {
-  Ticker,
-};
+export const Ticker = mongoose.model("tickers", ticker);

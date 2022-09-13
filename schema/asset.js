@@ -11,4 +11,4 @@ const asset = new Schema({
   unit_currency: String, // 평단가 기준 화폐
 });
 
-const Asset = mongoose.model("Assets", asset);
+export const Asset = mongoose.model("Assets", asset);

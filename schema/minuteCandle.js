@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const minuteCandle = new Schema({
@@ -17,8 +17,4 @@ const minuteCandle = new Schema({
 });
 
 // candle 1분봉
-const MinuteCandle = mongoose.model("candles1", minuteCandle);
-
-module.exports = {
-  MinuteCandle,
-};
+export const MinuteCandle = mongoose.model("candles1", minuteCandle);
