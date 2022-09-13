@@ -25,94 +25,94 @@ npm install mongoose
 ```javascript
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/project"); // database name: project
+mongoose.connect("mongodb://127.0.0.1:27017/databaseName"); // database name: project
 
+// 아래 db 코드는 확인할 때 사용한다. 코드 생략 가능
 const db = mongoose.connection;
-
 db.on("open", function () {
   console.log("Connected");
 });
-
 db.on("error", function () {
   console.log("Connection Failed!");
 });
 
-// Schema 생성
-const foo = mongoose.Schema({
-  name: "string",
-  age: "number",
-});
+/**
+ * 최초 데이터 1건을 조회한다.
+ * @param {mongoose.Schema} schema
+ * @param {object} filter
+ * @returns
+ */
+const FindFirst = async (schema, filter) => {
+  return await schema
+    .findOne(filter)
+    .then((response) => response)
+    .catch((error) => error);
+};
 
-// DB: project ,  collection: foo  연결
-const Foo = mongoose.model("foo", foo);
-
-/*  데이터 저장
-    input parameter: data 는 객체 배열
-    [{name: 'foo1', age: 25}] 또는 [ {name: 'foo1', age: 25}, {name: 'foo2', age: 30}, ... ]
-*/
-const insert = (data) => {
+/**
+ * 데이터를 저장한다.
+ * @param {mongoose.Schema} schema
+ * @param {object[]} data
+ */
+const Save = (schema, data) => {
   for (value in data) {
-    new Foo(data[value]).save(function (error, data) {
-      if (error) {
-        console.log("failed");
-      } else {
-        console.log("Success");
-      }
-    });
+    new schema(data[value])
+      .save()
+      .then((response) => response)
+      .catch((error) => error);
   }
 };
-
-// 데이터 조회
-// 방법 1. collection 데이터 전체 조회
-const findAll = async () => {
-  return await Foo.find(function (error, data) {
-    if (error) {
-      return error;
-    } else {
-      return data;
-    }
-  }).clone();
-  /*
-    MongooseError: Query was already executed
-    findAll() 함수로 데이터를 받아오는 과정에서 위와 같은 오류가 발생했다
-    clone() 을 추가하여 해결하였음
-  */
+/**
+ * 데이터를 조회하고, 최신순으로 조회한다.
+ * @param {mongoose.Schema} schema
+ * @param {object} filter
+ * @param {number} limit
+ * @returns
+ */
+const Find = async (schema, filter = undefined, limit = undefined) => {
+  return await schema
+    .find(filter)
+    .sort({ _id: -1 })
+    .limit(limit)
+    .then((response) => response)
+    .catch((error) => error);
 };
 
-// 방법 2.  filter ex.  { age : 30 }
-const findFilter = async (filter) => {
-  return await Foo.find(filter)
-    .sort({ _id: -1 }) // -1 : 최신 데이터부터,  1 : 오래된 데이터부터
-    .limit(1) // 1건만 조회
-    .then((res) => res)
-    .catch((e) => e);
+/**
+ * 데이터를 삭제한다.
+ * @param {mongoose.Schema} schema
+ * @param {object[]} data
+ * @returns { acknowledged: boolean, deletedCount: number }
+ */
+const Delete = async (schema, filter = undefined) => {
+  return await Market.deleteMany(filter)
+    .then((response) => response)
+    .catch((error) => error);
 };
-
-// 방법 3. 1건만 조회 (최초 생성 데이터만 조회되었음)
-const findOne = async (filter) => {
-  return await Foo.findOne(filter, function (error, data) {
-    if (error) {
-      return error;
-    } else {
-      return data;
-    }
-  });
-};
-
-// 데이터 전체 삭제
-// return: { acknowledged: true, deletedCount: 0 }
-const deleteAll = async () => {
-    return await Foo.deleteMany();
-}
 
 // mongoose 조회 함수 호출하기
 ( async () => {
-  const console1 = await findAll(); // 전체 조회
-  console.log(console1);
-
-  const console2 = await deleteAll(); // 전체 삭제
-  console.log(console2);
+  
+  const returnDelete = await Delete(Ticker);
+  console.log(returnDelete.deletedCount);
 }) ();
+
+```
+
+Schema.js
+```javascript
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const ticker = new Schema({
+  name: string
+});
+
+const Ticker = mongoose.model("tickers", ticker);
+
+module.exports = {
+  Ticker,
+};
 
 ```
 
