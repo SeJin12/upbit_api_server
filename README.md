@@ -37,7 +37,7 @@ db.on("error", function () {
 });
 
 /**
- * 최초 데이터 1건을 조회한다.
+ * 최초 데이터 1건을 조회한다. (가장 오래된 데이터)
  * @param {mongoose.Schema} schema
  * @param {object} filter
  * @returns
@@ -85,18 +85,16 @@ const Find = async (schema, filter = undefined, limit = undefined) => {
  * @returns { acknowledged: boolean, deletedCount: number }
  */
 const Delete = async (schema, filter = undefined) => {
-  return await Market.deleteMany(filter)
+  return await schema.deleteMany(filter)
     .then((response) => response)
     .catch((error) => error);
 };
 
 // mongoose 조회 함수 호출하기
 ( async () => {
-  
   const returnDelete = await Delete(Ticker);
   console.log(returnDelete.deletedCount);
 }) ();
-
 ```
 
 Schema.js
@@ -113,7 +111,6 @@ const Ticker = mongoose.model("tickers", ticker);
 module.exports = {
   Ticker,
 };
-
 ```
 
 ### Reference Site

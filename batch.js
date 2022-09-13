@@ -7,6 +7,7 @@ const { Ticker } = require("./schema/ticker.js");
 
 const Utils = require("./Utils.js");
 const { MinuteCandle } = require("./schema/minuteCandle.js");
+const { defaultGet } = require("./AxiosUtils/Http");
 
 /**
  * 마켓 종목 동기화. 매일 12시 실행
@@ -16,13 +17,11 @@ schedule.scheduleJob("0 0 12 * * *", async function () {
 
   const marketList = await Find(Market);
 
-  const data = await axios
-    .get("https://api.upbit.com/v1/market/all?isDetails=true")
-    .then((res) => res.data);
-
-  if (marketList.length !== data.length) {
+  const response = await defaultGet("https://api.upbit.com/v1/market/all?isDetails=true");
+  
+  if (marketList.length !== response.data.length) {
     await Delete(Market);
-    Save(Market, data);
+    Save(Market, response.data);
   }
 });
 

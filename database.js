@@ -28,6 +28,7 @@ const Save = (schema, data) => {
       .catch((error) => error);
   }
 };
+
 /**
  * 데이터를 조회하고, 최신순으로 조회한다.
  * @param {mongoose.Schema} schema
@@ -51,7 +52,7 @@ const Find = async (schema, filter = undefined, limit = undefined) => {
  * @returns { acknowledged: boolean, deletedCount: number }
  */
 const Delete = async (schema, filter = undefined) => {
-  return await Market.deleteMany(filter)
+  return await schema.deleteMany(filter)
     .then((response) => response)
     .catch((error) => error);
 };
