@@ -7,11 +7,6 @@ import * as jsonwebtoken from "jsonwebtoken";
 import crypto from "crypto";
 import { encode as queryEncode } from "querystring";
 
-const uuidv4 = uuid4.uuidv4;
-const sign = jsonwebtoken.sign;
-
-const server_url = "https://api.upbit.com";
-
 import { MinuteCandle } from "./schema/minuteCandle.js";
 import { Find } from "./database.js";
 import { Market } from "./schema/market.js";
@@ -19,6 +14,10 @@ import { Ticker } from "./schema/ticker.js";
 
 // Exec batch schedule
 import * as batch from "./batch.js";
+
+const uuidv4 = uuid4.uuidv4;
+const sign = jsonwebtoken.sign;
+const server_url = "https://api.upbit.com";
 
 // Server
 const app = express();

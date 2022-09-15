@@ -3,14 +3,12 @@ import schedule from "node-schedule";
 import { Delete, Find, Save } from "./database.js";
 import { Market } from "./schema/market.js";
 import { Ticker } from "./schema/ticker.js";
-import { defaultGet } from "./AxiosUtils/Http.js";
-
-// import { getRemainRequest } from "./Utils.js";
+import { defaultGet } from "./Utils/apiUtils.js";
 
 /**
  * 마켓 종목 동기화. 
  */
-schedule.scheduleJob("0 * * * * *", async function () {
+schedule.scheduleJob("0 0 * * * *", async function () {
   console.log("스케줄링 시작: 마켓 종목 동기화.");
 
   const marketList = await Find(Market);
@@ -45,7 +43,10 @@ schedule.scheduleJob("0 * * * * *", async function () {
     });
 
     let index = 0;
-    if (size == 0) return;
+    if (size == 0) {
+      console.error('마켓 코드 없음');
+      return;
+    }
     setInterval(async () => {
       const data = await axios
         .get(`https://api.upbit.com/v1/ticker/?markets=${list[index].market}`)
