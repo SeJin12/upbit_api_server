@@ -9,6 +9,7 @@ const asset = new Schema({
   avg_buy_price: String, //매수평균가
   avg_buy_price_modified: Boolean, // 매수평균가 수정 여부
   unit_currency: String, // 평단가 기준 화폐
+  snapshot: Date // 스냅샷 일시. 추후 자산 그래프
 });
 
 export const Asset = mongoose.model("Assets", asset);
