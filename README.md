@@ -1,8 +1,9 @@
 # upbit_api_server
 
 업비트 OpenAPI 활용하여 서버 개발하기
->> 많은 Client 요청이 업비트 API를 직접 호출하다보니 요청 제한 횟수(`429 Too Many Requests`) 때문에, 문제가 발생 😡 <br>
->> 서버 스케줄링(batch 작업)을 통해 MongoDB에 데이터를 저장
+> 많은 Client 요청이 업비트 API를 직접 호출하다보니 요청 제한 횟수(`429 Too Many Requests`) 때문에, 문제가 발생 😡 <br>
+> 서버 스케줄링(batch 작업)을 통해 MongoDB에 데이터를 저장
+
 
 [업비트 OpenAPI](https://docs.upbit.com/reference)
 
