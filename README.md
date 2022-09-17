@@ -140,12 +140,14 @@ $ docker-compose -f <file> up
 docker rmi -f $(docker images -f "dangling=true" -q)
 ```
 - `rmi -f` 이미지를 강제로 삭제. Stopped된 컨테이너에서 해당 이미지를 사용하고 있어 삭제할 수 없는 경우 사용
+
 ```bash
 docker rm $(docker ps --filter status=exited -q)
 ```
 - Exited 상태인 컨테이너를 모두 삭제
 - 이미지 상태가 none이 아닌 Exited 상태의 컨테이너도 삭제하기 때문에 주의하여 사용
-<br> [blog link](https://jhkimmm.tistory.com/9)
+<br> 
+[blog link](https://jhkimmm.tistory.com/9)
 <br><br>
 
 ***
