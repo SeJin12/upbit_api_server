@@ -135,7 +135,9 @@ $ docker-compose -f <file> up
 - 지정한 compose 파일을 실행합니다
 - `-f <file>` 명령어가 없다면, `default` docker-compose.yml 을 실행합니다
 <br>
+
 ### Tag가 없는 (none) 이미지 삭제하기
+
 ```bash
 docker rmi -f $(docker images -f "dangling=true" -q)
 ```
@@ -146,8 +148,9 @@ docker rm $(docker ps --filter status=exited -q)
 ```
 - Exited 상태인 컨테이너를 모두 삭제
 - 이미지 상태가 none이 아닌 Exited 상태의 컨테이너도 삭제하기 때문에 주의하여 사용
-<br> 
+
 [blog link](https://jhkimmm.tistory.com/9)
+
 <br><br>
 
 ***
