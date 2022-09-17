@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+ backend:
+  image: api-server # 해당 서비스에서 사용할 image
+  container_name: "backend" # container 이름 정의
+  restart: always # container를 실행할 때 이미 수행중이라면 재시작
+  build:
+   context: .
+  ports: # 서비스 포트 지정
+   - 9000:8000 # local:container
+  # environment:
+  #  - SERVER_PORT=8000
+  #  - CONNECTIONSTRING=mongodb://mongo:27017
+  depends_on: # 실행순서를 설정 mongo 시작 후 실행
+    - mongo
+  volumes:
+   - ./:/app
+  command: npm run debug
+
+ mongo:
+  image: mongo:4.2.8
+  container_name: "mongo"
+  restart: always
+  ports:
+   - 27017:27017
+  volumes:
+   - mongodb:/data/db
+   - mongodb_config:/data/configdb
+volumes:
+ mongodb:
+ mongodb_config:

@@ -4,10 +4,6 @@ import { encode as queryEncode } from "querystring";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
 
-// TODO: DELETE
-import axios from "axios";
-import fs from "fs";
-
 /**
  * Upbit Private 요청인 경우 사용
  * @param {object} token
@@ -23,13 +19,18 @@ export const upbitConfig = (token) => {
 
   const config = {
     baseURL: "https://api.upbit.com",
-    headers: { 
-        'Content-Type' : 'application/json; charset=UTF-8'
-        , Authorization: `Bearer ${sign(payload, token.secret_key)}` },
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+      Authorization: `Bearer ${sign(payload, token.secret_key)}`,
+    },
   };
 
   return config;
 };
+
+// TODO: DELETE
+import axios from "axios";
+import fs from "fs";
 
 // TODO: Delete
 const env = JSON.parse(fs.readFileSync("./env.json"));
@@ -50,16 +51,13 @@ async function apitest() {
 
   // #2
   // 응답 스키마
-  await axios.get("/v1/accounts", upbitConfig(token)).then(function(response) {
-    console.log('data: ', response.data);
-    console.log('status: ',response.status);
-    console.log('statusText: ',response.statusText);
-    console.log('headers: ' ,response.headers);
+  await axios.get("/v1/api_keys", upbitConfig(token)).then(function (response) {
+    console.log("data: ", response.data);
+    console.log("status: ", response.status);
+    console.log("statusText: ", response.statusText);
+    console.log("headers: ", response.headers);
     // console.log('config: ',response.config);
-  })
-  
+  });
 }
 
-apitest();
-
-
+// apitest();
