@@ -3,7 +3,7 @@ import schedule from "node-schedule";
 import { Delete, Find, Save } from "./database.js";
 import { Market } from "./schema/market.js";
 import { Ticker } from "./schema/ticker.js";
-import { defaultGet } from "./Utils/apiUtils.js";
+import { defaultGet } from "./utils/api.js";
 
 /**
  * 마켓 종목 동기화. 
