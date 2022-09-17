@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/project");
+const isDocker = true;
+const network = isDocker ? "mongo" : "127.0.0.1";
+mongoose.connect(`mongodb://${network}:27017/project`); // Docker
 
 /**
  * 최초 데이터 1건을 조회한다.

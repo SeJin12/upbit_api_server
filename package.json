@@ -4,7 +4,8 @@
   "description": "api-server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug":  "nodemon --inspect=0.0.0.0:9229 server.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.0",
     "node-schedule": "^2.1.0",
+    "nodemon": "^2.0.20",
     "querystring": "^0.2.1",
     "request": "^2.88.2",
     "uuid": "^8.3.2",

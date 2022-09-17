@@ -8,24 +8,29 @@ import { defaultGet } from "./utils/api.js";
 /**
  * 마켓 종목 동기화. 
  */
-schedule.scheduleJob("0 0 * * * *", async function () {
-  console.log("스케줄링 시작: 마켓 종목 동기화.");
-
+async function syncMarkets() {
   const marketList = await Find(Market);
 
   const response = await defaultGet(
     "https://api.upbit.com/v1/market/all?isDetails=true"
   );
-
+  
   if (marketList.length !== response.data.length) {
     await Delete(Market);
     Save(Market, response.data);
   }
+}
+
+schedule.scheduleJob("0 0 * * * *", async function () {
+  console.log("스케줄링 시작: 마켓 종목 동기화.");
+
+  await syncMarkets();
 });
 
 // 현재가 정보를 조회한다.
 {
   (async () => {
+    await syncMarkets();
     // 마켓 코드 조회
     const marketList = await Find(Market);
 
