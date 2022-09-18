@@ -163,7 +163,21 @@ $ docker network ls
 $ docker volume ls
 # volume inspect
 $ docker volume inspect <VOLUME NAME>
+# volume delete
+$ docker volume rm <VOLUME NAME>
 ```
+
+### TODO: Docker Hub 이미지 공유하기
+```bash
+# Docker Hub 로그인
+$ docker login -u <DOCKER-ID>
+# docker tag 로 로컬에서 생성한 이미지에 새 이름을 지정 이미지 앞 Docker ID 입력
+# docker images 명령어로 이미지 확인  TODO: Tag 포함해야할 것 같은데 확인 필요
+$ docker tag <REPOSITORY-NAME> <DOCKER-ID>/<REPOSITORY-NAME> 
+# tagname 을 지정하지 않으면 default latest
+$ docker push <DOCKER-ID>/<REPOSITORY-NAME> 
+```
+
 ### Tag가 없는 (none) 이미지 삭제하기
 
 ```bash
