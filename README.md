@@ -11,6 +11,7 @@
 - javascript + NodeJS
 - MongoDB
 - axios, mongoose, node-schedule(batch)
+- Docker
 
 ***
 
@@ -136,6 +137,33 @@ $ docker-compose -f <file> up
 - `-f <file>` 명령어가 없다면, `default` docker-compose.yml 을 실행합니다
 <br>
 
+### Docker Compose 명령어
+```bash
+$ docker-compose up  or  docker-compose start <container-name>
+$ docker-compose down  or  docker-compose stop <container-name>
+```
+
+### 컨테이너 bash 접속
+```bash
+$ docker exec -it <container-name> bash
+```
+`it` interactive terminal 모드 
+
+### 컨테이너 로그 확인
+```bash
+$ docker logs <container-name> --follow
+```
+`--follow` 터미널로 로그 지속적으로 스트리밍
+
+### others
+```bash
+# network list
+$ docker network ls
+# volume list
+$ docker volume ls
+# volume inspect
+$ docker volume inspect <VOLUME NAME>
+```
 ### Tag가 없는 (none) 이미지 삭제하기
 
 ```bash
