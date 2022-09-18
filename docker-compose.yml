@@ -1,32 +1,41 @@
-version: '3.7'
+version: "3.7"
 
 services:
- backend:
-  image: api-server # 해당 서비스에서 사용할 image
-  container_name: "backend" # container 이름 정의
-  restart: always # container를 실행할 때 이미 수행중이라면 재시작
-  build:
-   context: .
-  ports: # 서비스 포트 지정
-   - 9000:8000 # local:container
-  # environment:
-  #  - SERVER_PORT=8000
-  #  - CONNECTIONSTRING=mongodb://mongo:27017
-  depends_on: # 실행순서를 설정 mongo 시작 후 실행
-    - mongo
-  volumes:
-   - ./:/app
-  command: npm run debug
+  backend: # 서비스 이름 지정
+    image: api-server # 해당 서비스에서 사용할 image
+    container_name: "backend" # container 이름 정의
+    restart: always # docker 엔진 실행시 자동으로 이미지를 실행
+    build: # Dockerfile이 위치하는 경로를 지정하기위해 사용
+      context: .
+      # dockerfile: dockerfile-alias # 파일 지정
+      # args:  
+        # env: 'development'      
+    ports: # 서비스 포트 지정
+      - 9000:8000 # local:container , 외부 포트:내부 포트
+    # environment:
+    #  - SERVER_PORT=8000
+    #  - CONNECTIONSTRING=mongodb://mongo:27017
+    depends_on: # 서비스 간 의존 관계를 지정. mongo 시작 후 실행
+      - mongo
+    volumes:
+      - ./:/app
+    command: npm run debug # Dockerfile의 CMD 명령문을 무시하고 실행할 명령어를 설정하기 위해 사용
 
- mongo:
-  image: mongo:4.2.8
-  container_name: "mongo"
-  restart: always
-  ports:
-   - 27017:27017
-  volumes:
-   - mongodb:/data/db
-   - mongodb_config:/data/configdb
+  mongo:
+    image: mongo:4.2.8  # docker hub image name : tag
+    container_name: "mongo"
+    restart: always
+    # environment:  # 변수 값을 compose 파일에 지정해줄 수 있지만, 동일한 경로에 .env 파일을 생성하여 사용할 수 있다 
+    # .env.dev , .env.prod 파일이 있다고하면  --env-file <file_path>  =>  docker compose --env-file ./config/.env.dev config  (맨뒤 config 왜 붙였지..확인 필요)
+    # --env-file 명시하지 않았다면,  default: .env 파일
+    # Dockerfile 에 명시하는 방법도 있다.  ENV MONGO_ROOT_ID <YOUR_ID> 
+    #   MONGO_ROOT_ID: ${MONGO_ROOT_ID}
+    #   MONGO_ROOT_PW: ${MONGO_ROOT_PW}
+    ports:
+      - 27017:27017 # 사용할 포트 : mognodb service port
+    volumes:
+      - mongodb:/data/db  # <volume-name>:<container-path>
+      - mongodb_config:/data/configdb # mount(마운트)가 필요한 호스트의 경로 : 컨테이너의 경로
 volumes:
- mongodb:
- mongodb_config:
+  mongodb:
+  mongodb_config:
